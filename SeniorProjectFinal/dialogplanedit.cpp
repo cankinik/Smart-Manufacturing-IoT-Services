@@ -102,7 +102,7 @@ void DialogPlanEdit::on_pushButton_4_clicked()
 {
     QTextStream out(stdout);
     out << "Saving" << Qt::endl;
-    cv::FileStorage fs("test.yml", cv::FileStorage::WRITE);
+    cv::FileStorage fs("../SeniorProjectFinal/ProgramParameters.yml", cv::FileStorage::WRITE);
     fs << "WidthOfPlan" << ui->mat_Display->plan_width;
     fs << "HeightOfPlan" << ui->mat_Display->plan_height;
     fs << "FloorPlanDirectory" << ui->mat_Display->floorPlanDirectory.toUtf8().constData();;

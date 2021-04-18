@@ -13,7 +13,7 @@ matDisplay::matDisplay(QWidget * parent) : QLabel(parent)
 
     this->image_current = new QImage;
 
-    this->image_current->load("/home/cankinik/Desktop/SeniorProject/EE102 PLAN.png");
+    this->image_current->load("../MainModule/EE102 PLAN.png");
 
 
     //rectangles = new std::vector<std::vector<int>>();
@@ -64,7 +64,7 @@ void matDisplay::mousePressEvent(QMouseEvent *mouse_event)
     if(mouse_event->button() == Qt::LeftButton){
         left_mouse_pos_click = mouse_event->pos();
         QTextStream out(stdout);
-        out << "left" << Qt::endl;
+//        out << "left" << Qt::endl;
         this->left_click = true;
 
         if(is_camera_place_mode_on){
@@ -82,7 +82,7 @@ void matDisplay::mouseReleaseEvent(QMouseEvent *mouse_event)
     if(mouse_event->button() == Qt::LeftButton){
         QPoint left_mouse_pos_release = mouse_event->pos();
         QTextStream out(stdout);
-        out << "release" << Qt::endl;
+//        out << "release" << Qt::endl;
         std::vector<int> mouse_coor = {left_mouse_pos_click.x(), left_mouse_pos_click.y(), left_mouse_pos_release.x() - left_mouse_pos_click.x(), left_mouse_pos_release.y() - left_mouse_pos_click.y() };
         rectangles.push_back(mouse_coor);
         this->left_click = false;
@@ -109,8 +109,8 @@ void matDisplay::paintEvent(QPaintEvent *event)
         //draw camera location if it is set
         if(is_camera_placed){
             QTextStream out(stdout);
-            out << "camera" << Qt::endl;
-            QPixmap pixmap2("/home/cankinik/Desktop/QTProject/SeniorProject/camera.png");
+//            out << "camera" << Qt::endl;
+            QPixmap pixmap2("../SeniorProjectFinal/camera.png");
 
             qPainter.drawPixmap(camera_pos.x()-25,camera_pos.y()-25,50,50, pixmap2);
         }
@@ -129,7 +129,7 @@ void matDisplay::paintEvent(QPaintEvent *event)
     }
     else{
         QTextStream out(stdout);
-        out << "Inside Paint Event" << Qt::endl;
+//        out << "Inside Paint Event" << Qt::endl;
 
 
         QImage scaledimg;
@@ -145,8 +145,8 @@ void matDisplay::paintEvent(QPaintEvent *event)
         //draw camera location if it is set
         if(is_camera_placed){
             QTextStream out(stdout);
-            out << "camera" << Qt::endl;
-            QPixmap pixmap2("/home/cankinik/Desktop/QTProject/SeniorProject/camera.png");
+//            out << "camera" << Qt::endl;
+            QPixmap pixmap2("../SeniorProjectFinal/camera.png");
 
             qPainter.drawPixmap(camera_pos.x()-25,camera_pos.y()-25,50,50, pixmap2);
         }

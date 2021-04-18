@@ -70,8 +70,7 @@ int main()
 	const int leftExtent = 400;
 	const int rightExtent = 400;
 	const int upExtent = 1550;
-	const int downExtent = 30; 
-	int socialDistancingViolationCounter = 0;
+	const int downExtent = 30; 	
 	Mat tempFrame1, tempFrame2;
 	
 	//Start of the program
@@ -81,10 +80,11 @@ int main()
 	// leftFeedThread = std::thread(continuallyUpdateUndistortedFrames, leftVideoFeed, &updatedLeftImage, 1, &programNotTerminated);
 	// rightFeedThread = std::thread(continuallyUpdateUndistortedFrames, rightVideoFeed, &updatedRightImage, 0, &programNotTerminated);
 	loadResults();	
+	getSystemParameters();
 	createUndistortionMapping();
 	calculateRotationAndTranslation();
 	usleep(1000000);	//Wait for 1 seconds so that the cameras open and the frames start being updated.
-	toolLocationUpdaterThread = std::thread(toolLocationUpdater, &updatedLeftImage, &updatedRightImage, &programNotTerminated);		
+	toolLocationUpdaterThread = std::thread(toolLocationUpdater, &leftImage, &rightImage, &programNotTerminated);		
 	while(programNotTerminated)
 	{		   			 
 		auto t1 = std::chrono::high_resolution_clock::now();
@@ -110,20 +110,10 @@ int main()
 				finalPoints = extractFinalPositions(positionsInROIs);
 				correctedFinalPoints = correctResultsForRotation(finalPoints);	
 
-				if(alertForSocialDistancing(correctedFinalPoints, 150.0) == 1)	//Social distancing treshold is 80cm right now
-				{
-					socialDistancingViolationCounter++;
-					if(socialDistancingViolationCounter > 20)					//The exposure time is selected as 20 frames, which takes around 2-5 seconds
-					{
-						putText(leftImage, "Social Distancing Violated!", Point2f(700, 40), FONT_HERSHEY_SIMPLEX, 1, CV_RGB(0, 0, 255), 3);
-						socialDistancingViolationCounter = 0;
-					}
-				}
-				else
-				{
-					socialDistancingViolationCounter = 0;
-				}	
+				alertForSocialDistancing(correctedFinalPoints, 150.0, 20);
+				alertProhibitedAreaEntry(correctedFinalPoints);
 
+				//Plotting location of workers
 				for(int i = 0; i < correctedFinalPoints.size(); i++)
 				{
 					x = correctedFinalPoints[i][4];
@@ -139,8 +129,7 @@ int main()
 			catch(const std::exception& e)
 			{
 				std::cerr << e.what() << '\n';
-			}
-			
+			}			
 					
 		}		
 		auto t2 = std::chrono::high_resolution_clock::now();
@@ -161,4 +150,3 @@ int main()
 	return 0;
 }
 
-// Take out the threaded camera feed stuff from here, and from taking pictures, add the rectangles and sizes from Arda

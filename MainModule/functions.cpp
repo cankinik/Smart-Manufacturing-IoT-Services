@@ -65,8 +65,9 @@ void toolLocationUpdater(Mat *updatedLeftImage, Mat *updatedRightImage, bool *pr
 Rect scaleROI(Rect ROI);
 void matchROIs(vector<Rect> *leftROIs, vector<Rect> *rightROIs);
 void matchIDROIs(vector<Rect> *leftROIs, vector<Rect> *rightROIs, vector<int> *leftFeedObjectIDVector, vector<int> *rightFeedObjectIDVector);
-int alertForSocialDistancing(vector<vector<float>> correctedFinalPoints, float socialDistancingTreshold);
-
+void alertForSocialDistancing(vector<vector<float>> correctedFinalPoints, float socialDistancingTreshold, int exposureTimeTreshold);
+void getSystemParameters();
+void alertProhibitedAreaEntry(vector<vector<float>> correctedFinalPoints);
 
 //Global Constants
 const double squareSize = 0.038; //0.029 for A4, for cagan it is 0.034
@@ -75,13 +76,15 @@ const int height = 1080;
 const Size imageSize = Size(1920, 1080); 
 const int leftFeedIndex = 1;	//This is also referred to as feed 1
 const int rightFeedIndex = 2;	//This is also referred to as feed 2
+const int ROIScalingTreshold = 200;
+
+//Global Variables
 int leftExtent = 400;
 int rightExtent = 400;
 int upExtent = 1550;
 int downExtent = 30; 
-const int ROIScalingTreshold = 200;
-
-//Global Variables
+int socialDistancingViolationCounter = 0;
+vector<vector<float>> prohibitedAreaRectangles;
 Mat cameraMatrix1, distCoeffs1, R1, T1;
 Mat cameraMatrix2, distCoeffs2, R2, T2;
 Mat R, F, E;
@@ -400,12 +403,12 @@ void stereoCalibration()
     file.release();
 }
 
-//Loads the coefficient and parameter results from the .yml file
+//Loads the coefficient and parameter results from the .yml file, also the rectangles and the layout sizes
 void loadResults()
 {
 	//These are correct for our system, but currently we are testing using the 1080 calibration yml file done in python
 	
-    FileStorage file("/home/cankinik/Desktop/SeniorProjectFinal/CameraCalibratingOption/CalibrationResults.yml", FileStorage::READ);	//"CalibrationResults.yml" ///home/cankinik/Desktop/QTProject/CameraCalibratingOption/CalibrationResults.yml
+    FileStorage file("../CameraCalibratingOption/CalibrationResults.yml", FileStorage::READ);	//"CalibrationResults.yml" ///home/cankinik/Desktop/QTProject/CameraCalibratingOption/CalibrationResults.yml
 
     file["cameraMatrix1"] >> cameraMatrix1;
     file["distCoeffs1"] >> distCoeffs1;
@@ -597,13 +600,13 @@ vector <vector<Point2f>> flannPoints(Mat leftFrame, Mat rightFrame, int minimumP
 		} 
 		else
 		{
-			cout << "Couldn't find points out of the key points" << endl;
+			// cout << "Couldn't find points out of the key points" << endl;
 		}   
 		//Note: might also return the treshold to evaluate confidence in the future 
 	}
 	else
 	{
-		cout << "Unable to detect any key-points in the frame!" << endl;
+		// cout << "Unable to detect any key-points in the frame!" << endl;
 	}    	
     return result;
 }
@@ -679,7 +682,7 @@ vector<vector<float>> extractFinalPositions(vector<vector<vector<float>>> allFou
 		}
 		else
 		{
-			cout << "Error in extract final positions" << endl;
+			// cout << "Error in extract final positions" << endl;
 		}
 	}
 	return finalPositions;
@@ -846,7 +849,7 @@ void toolLocationUpdater(Mat *updatedLeftImage, Mat *updatedRightImage, bool *pr
 				}
 				else
 				{
-					cout << "Object matching misfit" << endl;
+					// cout << "Object matching misfit" << endl;
 				}
 			}
 			
@@ -881,7 +884,7 @@ void toolLocationUpdater(Mat *updatedLeftImage, Mat *updatedRightImage, bool *pr
 				toolIDIndices[i].clear();	//Once you have covered all of the points of a certain toop type, clear that portion so that the next update is not affected by it				
 			}
 		}			
-		this_thread::sleep_for(chrono::milliseconds(10000) );	//Update the tool locations every 60 seconds
+		this_thread::sleep_for(chrono::milliseconds(60000) );	//Update the tool locations every 60 seconds
 	}
 	
 }
@@ -1023,9 +1026,14 @@ void matchIDROIs(vector<Rect> *leftROIs, vector<Rect> *rightROIs, vector<int> *l
 
 
 //Looks at the proximity of people between each other and alerts if social distancing is violated
-int alertForSocialDistancing(vector<vector<float>> correctedFinalPoints, float socialDistancingTreshold)
+void alertForSocialDistancing(vector<vector<float>> correctedFinalPoints, float socialDistancingTreshold, int exposureTimeTreshold)
 {	
 	float tempXDistance, tempYDistance, tempProximity;
+	if(socialDistancingViolationCounter > exposureTimeTreshold)					//The exposure time is selected as 20 frames, which takes around 2-5 seconds
+	{
+		cout << "Social Distancing Violated!" << endl;
+		socialDistancingViolationCounter = 0;
+	}
 	if( correctedFinalPoints.size() != 0 )
 	{
 		for (int i = 0; i < correctedFinalPoints.size() - 1; i++)
@@ -1037,12 +1045,40 @@ int alertForSocialDistancing(vector<vector<float>> correctedFinalPoints, float s
 				tempProximity = tempXDistance * tempXDistance + tempYDistance * tempYDistance;
 				if( tempProximity  < socialDistancingTreshold * socialDistancingTreshold  )
 				{			
-					return 1;
+					socialDistancingViolationCounter++;						
+					return;				
 				}
 			}
 		}
+	}	
+	socialDistancingViolationCounter = 0;
+}
+
+void getSystemParameters()
+{
+	FileStorage file("../SeniorProjectFinal/ProgramParameters.yml", FileStorage::READ);	
+	file["prohibited_rectangles"] >> prohibitedAreaRectangles;
+    file.release();
+}
+
+void alertProhibitedAreaEntry(vector<vector<float>> correctedFinalPoints)
+{
+	bool X1, X2, Y1, Y2;
+	for(int i = 1; i < prohibitedAreaRectangles.size(); i++)
+	{
+		for(int j = 0; j < correctedFinalPoints.size(); j++)
+		{
+			X1 = (correctedFinalPoints[j][4] > prohibitedAreaRectangles[i][0] * 100);
+			X2 = ( correctedFinalPoints[j][4] < prohibitedAreaRectangles[i][0] * 100 + prohibitedAreaRectangles[i][2] * 100 );
+			Y1 = (correctedFinalPoints[j][5] < prohibitedAreaRectangles[i][1] * 100);
+			Y2 = ( correctedFinalPoints[j][5] > prohibitedAreaRectangles[i][1] * 100 + prohibitedAreaRectangles[i][3] * 100 ); 
+			if( X1 && X2 && Y1 && Y2 )
+			{
+				cout << "You are in prohibited area!" << endl;
+			}
+		}
 	}
-	return 0;
+	
 }
 
 #endif

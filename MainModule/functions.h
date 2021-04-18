@@ -64,5 +64,7 @@ void toolLocationUpdater(Mat *updatedLeftImage, Mat *updatedRightImage, bool *pr
 Rect scaleROI(Rect ROI);
 void matchROIs(vector<Rect> *leftROIs, vector<Rect> *rightROIs);
 void matchIDROIs(vector<Rect> *leftROIs, vector<Rect> *rightROIs, vector<int> *leftFeedObjectIDVector, vector<int> *rightFeedObjectIDVector);
-int alertForSocialDistancing(vector<vector<float>> correctedFinalPoints, float socialDistancingTreshold);
+void alertForSocialDistancing(vector<vector<float>> correctedFinalPoints, float socialDistancingTreshold, int exposureTimeTreshold);
+void getSystemParameters();
+void alertProhibitedAreaEntry(vector<vector<float>> correctedFinalPoints);
 #endif
