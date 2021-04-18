@@ -1,0 +1,26 @@
+*.png
+*.jpg
+# Deepsort codes in build #
+*.o             
+# Neural network stuff #
+*.weights      
+*.meta
+*.ckpt-68577
+*.xml
+*.index
+*.data-00000-of-00001
+*.pb
+*.caffemodel
+*.prototxt
+# Video and audio#
+.*avi
+*.mp3
+TermProject
+.vscode/
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+sampleFootage/
+#Essentia stuff
+MainModule/essentia

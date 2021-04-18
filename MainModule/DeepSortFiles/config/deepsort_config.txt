@@ -1,0 +1,24 @@
+[DETECTION_FILE]
+DeepSortFiles/config/detections.txt
+[IMAGE_DIRECTORY]
+DeepSortFiles/images
+[METRIC_MODEL]
+DeepSortFiles/RUNNINGDATA/tensor_networks/111.meta
+[FEATURE_MODEL]
+DeepSortFiles/RUNNINGDATA/tensor_networks/mars-small128.ckpt-68577
+[ARGS_NN_BUDGET]
+100
+[ARGS_MAX_COSINE_DISTANCE]
+0.2
+[DT]
+1.0
+[MAX_IOU_DISTANCE]
+0.9
+[MAX_AGE]
+10
+[N_INIT]
+3
+[CLASSES]
+DeepSortFiles/config/coco.names
+[SHOW_DETECTIONS] # 1 = true 0 = false
+1

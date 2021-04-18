@@ -1,0 +1,11 @@
+1=jerry_seinfeld
+10=arda
+11=omer
+2=jake
+3=rosa
+4=santiago
+5=madonna
+6=cagan
+7=mert
+8=can_kinik
+9=mindy_kaling
