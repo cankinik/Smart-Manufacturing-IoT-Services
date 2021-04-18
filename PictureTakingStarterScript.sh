@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/cankinik/Desktop/QTProject/PictureTakingOption
+cd /home/cankinik/Desktop/SeniorProjectFinal/PictureTakingOption
 cmake .
 make
 ./PictureTaking

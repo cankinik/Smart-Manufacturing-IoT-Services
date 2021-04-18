@@ -405,7 +405,7 @@ void loadResults()
 {
 	//These are correct for our system, but currently we are testing using the 1080 calibration yml file done in python
 	
-    FileStorage file("/home/cankinik/Desktop/QTProject/CameraCalibratingOption/CalibrationResults.yml", FileStorage::READ);	//"CalibrationResults.yml" ///home/cankinik/Desktop/QTProject/CameraCalibratingOption/CalibrationResults.yml
+    FileStorage file("/home/cankinik/Desktop/SeniorProjectFinal/CameraCalibratingOption/CalibrationResults.yml", FileStorage::READ);	//"CalibrationResults.yml" ///home/cankinik/Desktop/QTProject/CameraCalibratingOption/CalibrationResults.yml
 
     file["cameraMatrix1"] >> cameraMatrix1;
     file["distCoeffs1"] >> distCoeffs1;

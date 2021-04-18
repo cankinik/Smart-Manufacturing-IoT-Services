@@ -58,8 +58,7 @@ int main()
 	DeepSortParam params;
 	params.read(configPath);
 	VideoTracker leftDeepsortTracker(params);
-	VideoTracker rightDeepsortTracker(params);
-
+	VideoTracker rightDeepsortTracker(params);	
 	//Variables from displaying thread function
 	Mat finalImage, floorPlan, tempFloorPlan;
 	floorPlan = imread("EE102 PLAN.png");
@@ -77,17 +76,15 @@ int main()
 	
 	//Start of the program
 	serverThread = std::thread(serverThreadFunction);
-	serverThread.detach();
-	
+	serverThread.detach();	
 	initializeCameras(&leftVideoFeed, &rightVideoFeed);	
 	// leftFeedThread = std::thread(continuallyUpdateUndistortedFrames, leftVideoFeed, &updatedLeftImage, 1, &programNotTerminated);
 	// rightFeedThread = std::thread(continuallyUpdateUndistortedFrames, rightVideoFeed, &updatedRightImage, 0, &programNotTerminated);
-	loadResults();
-	createUndistortionMapping();	
+	loadResults();	
+	createUndistortionMapping();
 	calculateRotationAndTranslation();
 	usleep(1000000);	//Wait for 1 seconds so that the cameras open and the frames start being updated.
 	toolLocationUpdaterThread = std::thread(toolLocationUpdater, &updatedLeftImage, &updatedRightImage, &programNotTerminated);		
-	
 	while(programNotTerminated)
 	{		   			 
 		auto t1 = std::chrono::high_resolution_clock::now();
@@ -104,7 +101,7 @@ int main()
 		leftROIs = leftDeepsortTracker.runFrame(leftImage);
 		rightROIs = rightDeepsortTracker.runFrame(rightImage);		
 			
-		matchROIs(&leftROIs, &rightROIs);									//Also makes it so that the bounds of the ROIs fall inside the regions of the images.
+		matchROIs(&leftROIs, &rightROIs);									//Also makes it so that the bounds of the ROIs fall inside the regions of the images.		
 		if( leftROIs.size() != 0 && rightROIs.size() != 0 )
 		{ 		
 			try

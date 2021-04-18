@@ -1,0 +1,8 @@
+# ninja log v5
+0	212	1618763678898842414	SeniorProjectFinal_autogen/timestamp	3c1fc69d04dc8df4
+212	1481	1618763680166826768	CMakeFiles/SeniorProjectFinal.dir/matdisplay.cpp.o	56fca88572b5ea9b
+212	1565	1618763680250825738	CMakeFiles/SeniorProjectFinal.dir/main.cpp.o	f9a1e2eb51cd7e70
+212	2524	1618763681210813953	CMakeFiles/SeniorProjectFinal.dir/SeniorProjectFinal_autogen/mocs_compilation.cpp.o	35807758b44c7e32
+212	2838	1618763681522810136	CMakeFiles/SeniorProjectFinal.dir/dialogplanedit.cpp.o	929b19cae4bc2479
+212	3044	1618763681730807593	CMakeFiles/SeniorProjectFinal.dir/mainwindow.cpp.o	396c57df2072b3e8
+3044	3696	1618763682378799685	SeniorProjectFinal	f158a8e1fa804621

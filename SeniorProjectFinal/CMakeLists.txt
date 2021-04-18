@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(SeniorProject LANGUAGES CXX)
+project(SeniorProjectFinal LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -43,19 +43,19 @@ set(PROJECT_SOURCES
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(SeniorProject
+    qt_add_executable(SeniorProjectFinal
         ${PROJECT_SOURCES}
     )
 else()
     if(ANDROID)
-        add_library(SeniorProject SHARED
+        add_library(SeniorProjectFinal SHARED
             ${PROJECT_SOURCES}
         )
     else()
-        add_executable(SeniorProject
+        add_executable(SeniorProjectFinal
             ${PROJECT_SOURCES}
         )
     endif()
 endif()
 
-target_link_libraries( SeniorProject PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${OpenCV_LIBS} )
+target_link_libraries( SeniorProjectFinal PRIVATE Qt${QT_VERSION_MAJOR}::Widgets ${OpenCV_LIBS} )

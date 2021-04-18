@@ -1,7 +1,0 @@
-%YAML:1.0
----
-WidthOfPlan: 0.
-HeightOfPlan: 0.
-FloorPlanDirectory: "/home/cankinik/Desktop/floorPlan.jpg"
-prohibited_rectangles:
-   {}

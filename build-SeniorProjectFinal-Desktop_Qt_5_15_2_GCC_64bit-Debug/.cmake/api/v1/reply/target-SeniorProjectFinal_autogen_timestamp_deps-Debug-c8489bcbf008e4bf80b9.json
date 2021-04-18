@@ -14,9 +14,9 @@
 			}
 		]
 	},
-	"id" : "SeniorProject_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+	"id" : "SeniorProjectFinal_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
 	"isGeneratorProvided" : true,
-	"name" : "SeniorProject_autogen_timestamp_deps",
+	"name" : "SeniorProjectFinal_autogen_timestamp_deps",
 	"paths" : 
 	{
 		"build" : ".",
@@ -44,13 +44,13 @@
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "/home/cankinik/Desktop/QTProject/build-SeniorProject-Desktop_Qt_5_15_2_GCC_64bit-Debug/CMakeFiles/SeniorProject_autogen_timestamp_deps",
+			"path" : "/home/cankinik/Desktop/SeniorProjectFinal/build-SeniorProjectFinal-Desktop_Qt_5_15_2_GCC_64bit-Debug/CMakeFiles/SeniorProjectFinal_autogen_timestamp_deps",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "/home/cankinik/Desktop/QTProject/build-SeniorProject-Desktop_Qt_5_15_2_GCC_64bit-Debug/CMakeFiles/SeniorProject_autogen_timestamp_deps.rule",
+			"path" : "/home/cankinik/Desktop/SeniorProjectFinal/build-SeniorProjectFinal-Desktop_Qt_5_15_2_GCC_64bit-Debug/CMakeFiles/SeniorProjectFinal_autogen_timestamp_deps.rule",
 			"sourceGroupIndex" : 1
 		}
 	],

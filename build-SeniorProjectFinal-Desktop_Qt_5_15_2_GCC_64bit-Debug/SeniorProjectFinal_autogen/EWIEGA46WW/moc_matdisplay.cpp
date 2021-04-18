@@ -7,7 +7,7 @@
 *****************************************************************************/
 
 #include <memory>
-#include "../../../SeniorProject/matdisplay.h"
+#include "../../../SeniorProjectFinal/matdisplay.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)

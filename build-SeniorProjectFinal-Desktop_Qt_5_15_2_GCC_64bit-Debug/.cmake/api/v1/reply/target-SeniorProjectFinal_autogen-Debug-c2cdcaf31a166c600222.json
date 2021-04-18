@@ -17,12 +17,12 @@
 	"dependencies" : 
 	[
 		{
-			"id" : "SeniorProject_autogen_timestamp_deps::@6890427a1f51a3e7e1df"
+			"id" : "SeniorProjectFinal_autogen_timestamp_deps::@6890427a1f51a3e7e1df"
 		}
 	],
-	"id" : "SeniorProject_autogen::@6890427a1f51a3e7e1df",
+	"id" : "SeniorProjectFinal_autogen::@6890427a1f51a3e7e1df",
 	"isGeneratorProvided" : true,
-	"name" : "SeniorProject_autogen",
+	"name" : "SeniorProjectFinal_autogen",
 	"paths" : 
 	{
 		"build" : ".",
@@ -51,19 +51,19 @@
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "/home/cankinik/Desktop/QTProject/build-SeniorProject-Desktop_Qt_5_15_2_GCC_64bit-Debug/CMakeFiles/SeniorProject_autogen",
+			"path" : "/home/cankinik/Desktop/SeniorProjectFinal/build-SeniorProjectFinal-Desktop_Qt_5_15_2_GCC_64bit-Debug/CMakeFiles/SeniorProjectFinal_autogen",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "/home/cankinik/Desktop/QTProject/build-SeniorProject-Desktop_Qt_5_15_2_GCC_64bit-Debug/CMakeFiles/SeniorProject_autogen.rule",
+			"path" : "/home/cankinik/Desktop/SeniorProjectFinal/build-SeniorProjectFinal-Desktop_Qt_5_15_2_GCC_64bit-Debug/CMakeFiles/SeniorProjectFinal_autogen.rule",
 			"sourceGroupIndex" : 1
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "/home/cankinik/Desktop/QTProject/build-SeniorProject-Desktop_Qt_5_15_2_GCC_64bit-Debug/SeniorProject_autogen/timestamp.rule",
+			"path" : "/home/cankinik/Desktop/SeniorProjectFinal/build-SeniorProjectFinal-Desktop_Qt_5_15_2_GCC_64bit-Debug/SeniorProjectFinal_autogen/timestamp.rule",
 			"sourceGroupIndex" : 1
 		}
 	],

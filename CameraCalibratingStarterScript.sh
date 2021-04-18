@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/cankinik/Desktop/QTProject/CameraCalibratingOption
+cd /home/cankinik/Desktop/SeniorProjectFinal/CameraCalibratingOption
 cmake .
 make
 ./CameraCalibrating

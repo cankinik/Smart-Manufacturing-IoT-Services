@@ -89,8 +89,10 @@ void MainWindow::on_ColorCalibrateButton_clicked()
 
 void MainWindow::on_UpdateFacesButton_clicked()
 {
-    system("rm /home/cankinik/Desktop/SeniorProject/FaceRecognitionFiles/label_map.txt");
-    system("rm /home/cankinik/Desktop/SeniorProject/FaceRecognitionFiles/face2.xml");
+    system("rm ../MainModule/FaceRecognitionFiles/label_map.txt");
+    system("rm ../MainModule/FaceRecognitionFiles/face2.xml");
+    //system("rm /home/cankinik/Desktop/SeniorProject/FaceRecognitionFiles/label_map.txt");
+    //system("rm /home/cankinik/Desktop/SeniorProject/FaceRecognitionFiles/face2.xml");
 }
 
 void MainWindow::on_UIButton_clicked()

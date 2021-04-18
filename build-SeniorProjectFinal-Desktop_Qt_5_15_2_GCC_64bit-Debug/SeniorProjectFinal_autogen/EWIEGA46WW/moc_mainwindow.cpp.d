@@ -1,5 +1,5 @@
-/home/cankinik/Desktop/QTProject/build-SeniorProject-Desktop_Qt_5_15_2_GCC_64bit-Debug/SeniorProject_autogen/EWIEGA46WW/moc_mainwindow.cpp: /home/cankinik/Desktop/QTProject/SeniorProject/mainwindow.h \
-  /home/cankinik/Desktop/QTProject/build-SeniorProject-Desktop_Qt_5_15_2_GCC_64bit-Debug/SeniorProject_autogen/moc_predefs.h \
+/home/cankinik/Desktop/SeniorProjectFinal/build-SeniorProjectFinal-Desktop_Qt_5_15_2_GCC_64bit-Debug/SeniorProjectFinal_autogen/EWIEGA46WW/moc_mainwindow.cpp: /home/cankinik/Desktop/SeniorProjectFinal/SeniorProjectFinal/mainwindow.h \
+  /home/cankinik/Desktop/SeniorProjectFinal/build-SeniorProjectFinal-Desktop_Qt_5_15_2_GCC_64bit-Debug/SeniorProjectFinal_autogen/moc_predefs.h \
   /home/cankinik/Qt/5.15.2/gcc_64/include/QtCore/qalgorithms.h \
   /home/cankinik/Qt/5.15.2/gcc_64/include/QtCore/qarraydata.h \
   /home/cankinik/Qt/5.15.2/gcc_64/include/QtCore/qatomic.h \

@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /home/cankinik/Desktop/QTProject/MainModule
+cd /home/cankinik/Desktop/SeniorProjectFinal/MainModule
 cmake .
 make
 ./TermProject

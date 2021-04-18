@@ -64,7 +64,8 @@ function eventTableUpdater(req, eventName)
 }
 
 app.get("/notifyOperatorForFall/:requestingIP", function(req, res) 
-{		
+{	
+	console.log("A worker has fallen!");
     eventTableUpdater(req, "Worker Fall");
 	res.status(200).send();
 });

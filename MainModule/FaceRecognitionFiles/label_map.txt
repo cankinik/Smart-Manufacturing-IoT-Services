@@ -1,9 +1,9 @@
 1=jerry_seinfeld
 10=arda
 11=omer
-2=jake
-3=rosa
-4=santiago
+2=elton_john
+3=jake
+4=rosa
 5=madonna
 6=cagan
 7=mert

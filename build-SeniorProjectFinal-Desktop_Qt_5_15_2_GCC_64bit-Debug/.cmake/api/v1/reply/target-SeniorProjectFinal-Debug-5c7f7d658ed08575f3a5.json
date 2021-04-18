@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "SeniorProject"
+			"path" : "SeniorProjectFinal"
 		}
 	],
 	"backtrace" : 1,
@@ -96,14 +96,14 @@
 			"includes" : 
 			[
 				{
-					"path" : "/home/cankinik/Desktop/QTProject/build-SeniorProject-Desktop_Qt_5_15_2_GCC_64bit-Debug"
+					"path" : "/home/cankinik/Desktop/SeniorProjectFinal/build-SeniorProjectFinal-Desktop_Qt_5_15_2_GCC_64bit-Debug"
 				},
 				{
-					"path" : "/home/cankinik/Desktop/QTProject/SeniorProject"
+					"path" : "/home/cankinik/Desktop/SeniorProjectFinal/SeniorProjectFinal"
 				},
 				{
 					"backtrace" : 0,
-					"path" : "/home/cankinik/Desktop/QTProject/build-SeniorProject-Desktop_Qt_5_15_2_GCC_64bit-Debug/SeniorProject_autogen/include"
+					"path" : "/home/cankinik/Desktop/SeniorProjectFinal/build-SeniorProjectFinal-Desktop_Qt_5_15_2_GCC_64bit-Debug/SeniorProjectFinal_autogen/include"
 				},
 				{
 					"backtrace" : 6,
@@ -159,14 +159,14 @@
 	"dependencies" : 
 	[
 		{
-			"id" : "SeniorProject_autogen_timestamp_deps::@6890427a1f51a3e7e1df"
+			"id" : "SeniorProjectFinal_autogen_timestamp_deps::@6890427a1f51a3e7e1df"
 		},
 		{
 			"backtrace" : 0,
-			"id" : "SeniorProject_autogen::@6890427a1f51a3e7e1df"
+			"id" : "SeniorProjectFinal_autogen::@6890427a1f51a3e7e1df"
 		}
 	],
-	"id" : "SeniorProject::@6890427a1f51a3e7e1df",
+	"id" : "SeniorProjectFinal::@6890427a1f51a3e7e1df",
 	"link" : 
 	{
 		"commandFragments" : 
@@ -524,8 +524,8 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "SeniorProject",
-	"nameOnDisk" : "SeniorProject",
+	"name" : "SeniorProjectFinal",
+	"nameOnDisk" : "SeniorProjectFinal",
 	"paths" : 
 	{
 		"build" : ".",
@@ -576,7 +576,7 @@
 			"backtrace" : 0,
 			"compileGroupIndex" : 0,
 			"isGenerated" : true,
-			"path" : "/home/cankinik/Desktop/QTProject/build-SeniorProject-Desktop_Qt_5_15_2_GCC_64bit-Debug/SeniorProject_autogen/mocs_compilation.cpp",
+			"path" : "/home/cankinik/Desktop/SeniorProjectFinal/build-SeniorProjectFinal-Desktop_Qt_5_15_2_GCC_64bit-Debug/SeniorProjectFinal_autogen/mocs_compilation.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
@@ -631,13 +631,13 @@
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "/home/cankinik/Desktop/QTProject/build-SeniorProject-Desktop_Qt_5_15_2_GCC_64bit-Debug/SeniorProject_autogen/timestamp",
+			"path" : "/home/cankinik/Desktop/SeniorProjectFinal/build-SeniorProjectFinal-Desktop_Qt_5_15_2_GCC_64bit-Debug/SeniorProjectFinal_autogen/timestamp",
 			"sourceGroupIndex" : 2
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "/home/cankinik/Desktop/QTProject/build-SeniorProject-Desktop_Qt_5_15_2_GCC_64bit-Debug/SeniorProject_autogen/timestamp.rule",
+			"path" : "/home/cankinik/Desktop/SeniorProjectFinal/build-SeniorProjectFinal-Desktop_Qt_5_15_2_GCC_64bit-Debug/SeniorProjectFinal_autogen/timestamp.rule",
 			"sourceGroupIndex" : 3
 		}
 	],
