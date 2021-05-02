@@ -9,7 +9,6 @@
 #include <cstdlib>
 #include <vector> 
 #include <unistd.h>
-
 #include "opencv2/core.hpp"
 #ifdef HAVE_OPENCV_XFEATURES2D
 #include "opencv2/highgui.hpp"
@@ -17,18 +16,9 @@
 #include "opencv2/xfeatures2d.hpp"
 #include <time.h>
 #include <thread> 
-
 #include <tensorflow/core/platform/env.h>
 #include <tensorflow/core/public/session.h>
-
 #include <algorithm>
-#include "VideoTracker.h"
-#include "param.h"
-
-#include "FaceClassifier.h"
-#include "HatDetector.h"
-#include "ToolDetector.h"
-
 #include "mysql_connection.h"
 #include <cppconn/driver.h>
 #include <cppconn/exception.h>
@@ -36,12 +26,17 @@
 #include <cppconn/statement.h>
 #include <sstream>
 #include <ctime>
+#include "VideoTracker.h"
+#include "param.h"
+#include "FaceClassifier.h"
+#include "HatDetector.h"
+#include "ToolDetector.h"
 
 using namespace cv::xfeatures2d;
 using namespace cv;
 using namespace std;
 
-//NOTE: Both stereo calibration and rotation calibration use {6, 9}, rather than {9, 6}, you might want to try calibrating while holding the paper vertically so that the dimensions match.
+//Useful linux commands for camera: v4l2-ctl --all, v4l2-ctl -l, v4l2-ctl -c white_balance_temperature_auto=0, v4l2-ctl -d /dev/video2 --all, ls -ltrh /dev/video*
 
 //Function Declerations
 void stereoCalibration();
@@ -79,10 +74,8 @@ const int rightFeedIndex = 2;	//This is also referred to as feed 2
 const int ROIScalingTreshold = 200;
 
 //Global Variables
-int leftExtent = 400;
-int rightExtent = 400;
-int upExtent = 1550;
-int downExtent = 30; 
+float leftExtent, rightExtent, upExtent, downExtent; 
+string layoutPictureDirectory;
 int socialDistancingViolationCounter = 0;
 vector<vector<float>> prohibitedAreaRectangles;
 Mat cameraMatrix1, distCoeffs1, R1, T1;
@@ -795,7 +788,7 @@ void toolLocationUpdater(Mat *updatedLeftImage, Mat *updatedRightImage, bool *pr
 	vector<vector<float>> finalPoints;
 	vector<vector<float>> correctedFinalPoints;
 	int leftObjectID, rightObjectID;
-	Mat floorPlan = imread("EE102 PLAN.png");
+	Mat floorPlan = imread(layoutPictureDirectory);
 	int imageWidth = floorPlan.size().width;
 	int imageHeight = floorPlan.size().height;
 	Mat tempFloorPlan, tempSquaredImage;
@@ -874,7 +867,7 @@ void toolLocationUpdater(Mat *updatedLeftImage, Mat *updatedRightImage, bool *pr
 					x = correctedFinalPoints[toolIDIndices[i][j]][4];
 					y = correctedFinalPoints[toolIDIndices[i][j]][5];
 					z = correctedFinalPoints[toolIDIndices[i][j]][6];
-					putText(tempFloorPlan, "o " + to_string((int)z), Point2f( ( x + leftExtent ) / (leftExtent + rightExtent) * imageWidth, ( upExtent - y ) / (upExtent + downExtent) * imageHeight ), FONT_HERSHEY_SIMPLEX, 0.6, CV_RGB(120, 160, 0), 2);
+					putText(tempFloorPlan, "o", Point2f( ( x + leftExtent ) / (leftExtent + rightExtent) * imageWidth, ( upExtent - y ) / (upExtent + downExtent) * imageHeight ), FONT_HERSHEY_SIMPLEX, 0.6, CV_RGB(120, 160, 0), 2);
 					rectangle(tempSquaredImage, leftROIs[toolIDIndices[i][j]], Scalar(0, 0, 255), 5, LINE_8, 0);
 					putText(tempFloorPlan, currentTimeAndDate, Point2f(20, 30), FONT_HERSHEY_SIMPLEX, 1, CV_RGB(0, 0, 255), 3);
 					putText(tempSquaredImage, currentTimeAndDate, Point2f(20, 30), FONT_HERSHEY_SIMPLEX, 1, CV_RGB(0, 0, 255), 3);
@@ -883,8 +876,15 @@ void toolLocationUpdater(Mat *updatedLeftImage, Mat *updatedRightImage, bool *pr
 				}
 				toolIDIndices[i].clear();	//Once you have covered all of the points of a certain toop type, clear that portion so that the next update is not affected by it				
 			}
+		}	
+		//Update the tool locations every 60 seconds, checking every 6 seconds if app is closed so that when the program is terminated, it waits at most 6 seconds.
+		for(int i = 0; i < 10; i++)
+		{
+			if((*programNotTerminated))
+			{
+				this_thread::sleep_for(chrono::milliseconds(6000) );	
+			}
 		}			
-		this_thread::sleep_for(chrono::milliseconds(60000) );	//Update the tool locations every 60 seconds
 	}
 	
 }
@@ -1056,9 +1056,20 @@ void alertForSocialDistancing(vector<vector<float>> correctedFinalPoints, float 
 
 void getSystemParameters()
 {
+	float cameraPositionX, cameraPositionY, widthOfPlan, heightOfPlan;
 	FileStorage file("../SeniorProjectFinal/ProgramParameters.yml", FileStorage::READ);	
 	file["prohibited_rectangles"] >> prohibitedAreaRectangles;
+	file["CameraPositionX"] >> cameraPositionX;
+	file["CameraPositionY"] >> cameraPositionY;
+	file["WidthOfPlan"] >> widthOfPlan;
+	file["HeightOfPlan"] >> heightOfPlan;		
+	file["HeightOfPlan"] >> heightOfPlan;
+	file["FloorPlanDirectory"] >> layoutPictureDirectory;	
     file.release();
+	leftExtent = cameraPositionX * 100;
+	rightExtent = widthOfPlan * 100 - leftExtent;
+	downExtent = cameraPositionY * 100;
+	upExtent = heightOfPlan * 100 - downExtent;	
 }
 
 void alertProhibitedAreaEntry(vector<vector<float>> correctedFinalPoints)

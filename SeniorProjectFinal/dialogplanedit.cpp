@@ -83,6 +83,7 @@ void DialogPlanEdit::writeVectorOfVector(cv::FileStorage &fs, std::string name, 
     int h_max = ui->mat_Display->size().height();
     int w_max = ui->mat_Display->size().width();
 
+
     fs << name;
     fs << "{";
     for (int i = 0; i < data.size(); i++)
@@ -105,6 +106,8 @@ void DialogPlanEdit::on_pushButton_4_clicked()
     cv::FileStorage fs("../SeniorProjectFinal/ProgramParameters.yml", cv::FileStorage::WRITE);
     fs << "WidthOfPlan" << ui->mat_Display->plan_width;
     fs << "HeightOfPlan" << ui->mat_Display->plan_height;
+    fs << "CameraPositionX" << (float)ui->mat_Display->camera_pos.x() / ui->mat_Display->size().width() * ui->mat_Display->plan_width;
+    fs << "CameraPositionY" << ui->mat_Display->plan_height - (float)ui->mat_Display->camera_pos.y() / ui->mat_Display->size().height() * ui->mat_Display->plan_height;
     fs << "FloorPlanDirectory" << ui->mat_Display->floorPlanDirectory.toUtf8().constData();;
     writeVectorOfVector(fs, "prohibited_rectangles", ui->mat_Display->rectangles);    
     fs.release();
