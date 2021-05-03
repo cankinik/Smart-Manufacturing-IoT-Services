@@ -162,10 +162,10 @@ void initializeCameras(VideoCapture *leftVideoFeed, VideoCapture *rightVideoFeed
 {
 	// *leftVideoFeed = VideoCapture(leftFeedIndex);
 	// *rightVideoFeed = VideoCapture(rightFeedIndex);
-	// *leftVideoFeed = VideoCapture("/home/cankinik/Desktop/Videos/left6.avi");
-	// *rightVideoFeed = VideoCapture("/home/cankinik/Desktop/Videos/right6.avi");	
-	*leftVideoFeed = VideoCapture("/home/cankinik/Desktop/left.avi");
-	*rightVideoFeed = VideoCapture("/home/cankinik/Desktop/right.avi");	
+	*leftVideoFeed = VideoCapture("/home/cankinik/Desktop/Videos/left7.avi");
+	*rightVideoFeed = VideoCapture("/home/cankinik/Desktop/Videos/right7.avi");	
+	// *leftVideoFeed = VideoCapture("/home/cankinik/Desktop/left.avi");
+	// *rightVideoFeed = VideoCapture("/home/cankinik/Desktop/right.avi");	
 	(*leftVideoFeed).set(CAP_PROP_FOURCC, 0x47504A4D);	//Using MJPG format rather than YUVY so that 30FPS 1080p is enabled
 	(*rightVideoFeed).set(CAP_PROP_FOURCC, 0x47504A4D);
 	(*leftVideoFeed).set(CAP_PROP_AUTOFOCUS, 0);		//Disabling autofocus so that the cameras will always see the same way
@@ -789,7 +789,6 @@ void toolLocationUpdater(Mat *updatedLeftImage, Mat *updatedRightImage, bool *pr
 	vector<vector<vector<float>>> positionsInROIs;
 	vector<vector<float>> finalPoints;
 	vector<vector<float>> correctedFinalPoints;
-	int leftObjectID, rightObjectID;
 	Mat floorPlan = imread(layoutPictureDirectory);
 	int imageWidth = floorPlan.size().width;
 	int imageHeight = floorPlan.size().height;
@@ -799,21 +798,24 @@ void toolLocationUpdater(Mat *updatedLeftImage, Mat *updatedRightImage, bool *pr
 
 	vector<vector<int>> toolIDIndices;	
 	vector<int> emptyVector;
-	toolIDIndices.push_back(emptyVector);	//Chair
-	toolIDIndices.push_back(emptyVector);	//Laptop
-	toolIDIndices.push_back(emptyVector);	//Keyboard
-
+	toolIDIndices.push_back(emptyVector);	//Drill
+	toolIDIndices.push_back(emptyVector);	//Grinder
 	ToolDetector toolDetector;
 
 	while ((*programNotTerminated))
 	{
 		leftImage = (*updatedLeftImage);
 		rightImage = (*updatedRightImage);
+		leftROIs.clear();
+		rightROIs.clear();
+		leftFeedObjectIDVector.clear();
+		rightFeedObjectIDVector.clear();
 		toolDetector.detectObjects(leftImage, leftROIs, leftFeedObjectIDVector);
 		toolDetector.detectObjects(rightImage, rightROIs, rightFeedObjectIDVector);
-		matchIDROIs(&leftROIs, &rightROIs, &leftFeedObjectIDVector, &rightFeedObjectIDVector);
+		matchIDROIs(&leftROIs, &rightROIs, &leftFeedObjectIDVector, &rightFeedObjectIDVector);	
+		
 		if( leftROIs.size() != 0 && rightROIs.size() != 0 )
-		{
+		{			
 			positionsInROIs = findPositions(leftImage, rightImage, leftROIs, rightROIs);
 			finalPoints = extractFinalPositions(positionsInROIs);
 			correctedFinalPoints = correctResultsForRotation(finalPoints);
@@ -823,28 +825,15 @@ void toolLocationUpdater(Mat *updatedLeftImage, Mat *updatedRightImage, bool *pr
 			//Adding the indices of the points to their respective vectors depending on the object ID
 			for(int i = 0; i < correctedFinalPoints.size(); i++)
 			{
-				leftObjectID = leftFeedObjectIDVector[i];
-				if ( leftObjectID == rightFeedObjectIDVector[i] )
+				if ( leftFeedObjectIDVector[i] == 1 )
 				{
-					if ( leftObjectID == 1 )
-					{
-						//Drill
-						toolIDIndices[0].push_back(i);
-					}
-					else if ( leftObjectID == 2 )
-					{
-						//Grinder
-						toolIDIndices[1].push_back(i);
-					}
-					else if ( leftObjectID == 66 )
-					{
-						//Keyboard
-						toolIDIndices[2].push_back(i);
-					}
+					//Drill
+					toolIDIndices[0].push_back(i);
 				}
-				else
+				else if ( leftFeedObjectIDVector[i] == 2 )
 				{
-					// cout << "Object matching misfit" << endl;
+					//Grinder
+					toolIDIndices[1].push_back(i);
 				}
 			}
 			
@@ -860,10 +849,6 @@ void toolLocationUpdater(Mat *updatedLeftImage, Mat *updatedRightImage, bool *pr
 				{
 					toolName = "Grinder";
 				}
-				else if ( i == 2 )
-				{
-					toolName = "Keyboard";
-				}	
 				for (int j = 0; j < toolIDIndices[i].size(); j++)	//Iterating over all objects of the same type of tool. (For example, each j is for another chair) toolIDIndices[i][j] is the index of the object in the results.
 				{									
 					x = correctedFinalPoints[toolIDIndices[i][j]][4];
@@ -880,7 +865,7 @@ void toolLocationUpdater(Mat *updatedLeftImage, Mat *updatedRightImage, bool *pr
 			}
 		}	
 		//Update the tool locations every 60 seconds, checking every 600ms if app is closed so that when the program is terminated, it waits at most 600ms.
-		for(int i = 0; i < 100; i++)
+		for(int i = 0; i < 10; i++)
 		{
 			if((*programNotTerminated))
 			{
@@ -945,9 +930,6 @@ void matchROIs(vector<Rect> *leftROIs, vector<Rect> *rightROIs)
 				correctedLeftROI.push_back((*leftROIs)[i]);
 				correctedRightROI.push_back((*rightROIs)[j]);
 				(*rightROIs).erase((*rightROIs).begin() + j);							//Removing that box so that it will not be paired with other boxes from left
-				// cout << "Y diff: " << to_string(abs(leftROIs[i].y - rightROIs[j].y)) << endl;
-				// cout << "Width diff: " << to_string(abs(leftROIs[i].width - rightROIs[j].width)) << endl;
-				// cout << "Height diff: " << to_string(abs(leftROIs[i].height - rightROIs[j].height)) << endl;
 				break;
 			}
 		}
@@ -965,17 +947,46 @@ void matchIDROIs(vector<Rect> *leftROIs, vector<Rect> *rightROIs, vector<int> *l
 	vector<int> correctedLeftIDs;
 	vector<int> correctedRightIDs;
 
-	//sort( (*leftROIs).begin(), (*leftROIs).end(), [](const Rect& a, const Rect& b) {return a.x < b.x;});
-	//sort( (*rightROIs).begin(), (*rightROIs).end(), [](const Rect& a, const Rect& b) {return a.x < b.x;});
+	correctedLeftROI = (*leftROIs);
+	correctedRightROI = (*rightROIs);
+	correctedLeftIDs = (*leftFeedObjectIDVector);
+	correctedRightIDs = (*rightFeedObjectIDVector);
+	sort( (*leftROIs).begin(), (*leftROIs).end(), [](const Rect& a, const Rect& b) {return a.x < b.x;});
+	sort( (*rightROIs).begin(), (*rightROIs).end(), [](const Rect& a, const Rect& b) {return a.x < b.x;});
+	for(int i = 0; i < (*leftROIs).size(); i++)
+	{
+		for(int j = 0; j < correctedLeftROI.size(); j++)
+		{
+			if( (*leftROIs)[i].x == correctedLeftROI[j].x )
+			{
+				correctedLeftIDs[i] = (*leftFeedObjectIDVector)[j];
+				break;
+			}
+		}		
+	}
+	for(int i = 0; i < (*rightROIs).size(); i++)
+	{
+		for(int j = 0; j < correctedRightROI.size(); j++)
+		{
+			if( (*rightROIs)[i].x == correctedRightROI[j].x )
+			{
+				correctedRightIDs[i] = (*rightFeedObjectIDVector)[j];
+				break;
+			}
+		}		
+	}
+	(*leftFeedObjectIDVector) = correctedLeftIDs;
+	(*rightFeedObjectIDVector) = correctedRightIDs;
+	correctedLeftIDs.clear();
+	correctedRightIDs.clear();
+	correctedLeftROI.clear();
+	correctedRightROI.clear();
 
-	//Can also use &&  ( abs(leftROIs[i].width - rightROIs[j].width) < 100 ) && ( abs(leftROIs[i].height - rightROIs[j].height) < 100 ) in the if condition, but this makes it not work when an object is partially in (partial bb)
-	//Another idea is to look at the pixel range of each camera, where the other camera doesn't see anything, so that if the boundary box falls in x + width = 30 for right box, then we know it is not seen in the left feed.
-	//We can look for the best matches, but that will be considerably slower (N squared vs N, maybe slightly less even)
 	for(int i = 0; i < (*leftROIs).size(); i++)
 	{
 		for(int j = 0; j < (*rightROIs).size(); j++)
 		{
-			if( ( (*leftROIs)[i].x < (*rightROIs)[j].x ) && ( abs((*leftROIs)[i].y - (*rightROIs)[j].y) < 100  ))
+			if( ( (*leftROIs)[i].x < (*rightROIs)[j].x ) && ( abs((*leftROIs)[i].y - (*rightROIs)[j].y) < 150  ))	
 			{
 				//Correct for boundary boxes that go outside the boundaries of the image
 				if( (*leftROIs)[i].x < 0 )
@@ -1033,7 +1044,7 @@ void alertForSocialDistancing(vector<vector<float>> correctedFinalPoints, float 
 	float tempXDistance, tempYDistance, tempProximity;
 	if(socialDistancingViolationCounter > exposureTimeTreshold)					//The exposure time is selected as 20 frames, which takes around 2-5 seconds
 	{
-		cout << "Social Distancing Violated!" << endl;
+		cout << "Social Distancing Has Been Violated!" << endl;
 		socialDistancingViolationCounter = 0;
 	}
 	if( correctedFinalPoints.size() != 0 )
@@ -1087,11 +1098,10 @@ void alertProhibitedAreaEntry(vector<vector<float>> correctedFinalPoints)
 			Y2 = ( correctedFinalPoints[j][5] > prohibitedAreaRectangles[i][1] * 100 + prohibitedAreaRectangles[i][3] * 100 ); 
 			if( X1 && X2 && Y1 && Y2 )
 			{
-				cout << "You are in prohibited area!" << endl;
+				cout << "Someone has entered a prohibited area!" << endl;
 			}
 		}
-	}
-	
+	}	
 }
 
 #endif

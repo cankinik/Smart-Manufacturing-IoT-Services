@@ -29,12 +29,12 @@ class ToolDetector
 
 	private:
 		
-		float confThreshold = 0.01;
+		float confThreshold = 0.1;
 		float nmsThreshold = 0.4;
 		
 		
 
-		string model_path = "DeepSortFiles/config/2tools_complex_frozen_graph.pb";
+		string model_path = "DeepSortFiles/config/2tools_complex_frozen_graph_2.pb";
 		
 		    bool status;
 
@@ -53,7 +53,7 @@ class ToolDetector
 		            "Identity_6:0",
 		            "Identity_7:0"};
 	    
-	    const int size = 640;
+	    const int size = 1080;
 		
 
 

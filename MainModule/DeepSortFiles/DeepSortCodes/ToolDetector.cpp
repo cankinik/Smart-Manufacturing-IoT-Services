@@ -153,7 +153,6 @@ void ToolDetector::detectObjects(cv::Mat frame, vector<Rect> &boxes, vector<int>
 		
 		continue;
 	}
-	
 	/**
 	
 

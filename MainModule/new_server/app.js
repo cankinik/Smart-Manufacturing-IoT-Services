@@ -1,7 +1,4 @@
 //Hint: npx kill-port 3000 kills the process in port 3000
-
-
-
 const express = require('express')
 const fs = require('fs');
 const upload = require("express-fileupload");
@@ -88,12 +85,6 @@ app.get("/getTool2Layout/:requestingIP", function(req, res)
 	res.download('tool_image_files/LatestGrinderLocationsLayout.png');	
 });
 
-app.get("/getTool3Layout/:requestingIP", function(req, res) 
-{
-	eventTableUpdater(req, "Tool 3 Layout Request");
-	res.download('tool_image_files/LatestKeyboardLocationsLayout.png');	
-});
-
 app.get("/getTool1Real/:requestingIP", function(req, res) 
 {
 	eventTableUpdater(req, "Tool 1 Real Request");
@@ -104,12 +95,6 @@ app.get("/getTool2Real/:requestingIP", function(req, res)
 {
 	eventTableUpdater(req, "Tool 2 Real Request");
 	res.download('tool_image_files/LatestGrinderLocationsSquared.png');	
-});
-
-app.get("/getTool3Real/:requestingIP", function(req, res) 
-{
-	eventTableUpdater(req, "Tool 3 Real Request");
-	res.download('tool_image_files/LatestKeyboardLocationsSquared.png');	
 });
 
 app.post("/addAudio/:requestingIP", function(req, res) 

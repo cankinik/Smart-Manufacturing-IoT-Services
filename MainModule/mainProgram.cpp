@@ -56,7 +56,8 @@ int main()
 	char userInputKey;	
 	int imageWidth = floorPlan.size().width;
 	int imageHeight = floorPlan.size().height;
-	float x, y, z;			
+	float x, y, z;	
+	Mat resultImage;		
 
 	Mat tempFrame1, tempFrame2;
 	//Start of the program
@@ -73,17 +74,17 @@ int main()
 		auto t1 = std::chrono::high_resolution_clock::now();
 		floorPlan.copyTo(tempFloorPlan);
 		
-		leftVideoFeed >> tempFrame1;
-		rightVideoFeed >> tempFrame2;
-		leftVideoFeed >> tempFrame1;
-		rightVideoFeed >> tempFrame2;
+		// leftVideoFeed >> tempFrame1;
+		// rightVideoFeed >> tempFrame2;
+		// leftVideoFeed >> tempFrame1;
+		// rightVideoFeed >> tempFrame2;
 		leftVideoFeed >> tempFrame1;
 		rightVideoFeed >> tempFrame2;
 		leftImage = myUndistort(1, tempFrame1);
 		rightImage = myUndistort(0, tempFrame2);
 		leftROIs = leftDeepsortTracker.runFrame(leftImage);
 		rightROIs = rightDeepsortTracker.runFrame(rightImage);		
-			
+		leftImage.copyTo(resultImage);	
 		matchROIs(&leftROIs, &rightROIs);									//Also makes it so that the bounds of the ROIs fall inside the regions of the images.	
 		if( leftROIs.size() != 0 && rightROIs.size() != 0 )
 		{ 		
@@ -94,24 +95,24 @@ int main()
 			alertForSocialDistancing(correctedFinalPoints, 150.0, 20);
 			alertProhibitedAreaEntry(correctedFinalPoints);
 
-			//Plotting location of workers
+			//Plotting location of workers			
 			for(int i = 0; i < correctedFinalPoints.size(); i++)
-			{
+			{				
 				x = correctedFinalPoints[i][4];
 				y = correctedFinalPoints[i][5];
 				z = correctedFinalPoints[i][6];
 				//Setting up image of camera feed				
-				rectangle(leftImage, leftROIs[i], Scalar( 0, 0, 255 ), 2);
-				circle(leftImage, Point2f(correctedFinalPoints[i][0], correctedFinalPoints[i][1]), 4, Scalar( 0, 0, 255 ), FILLED, LINE_8);
-				putText(leftImage, to_string( (int)y ), Point2f(correctedFinalPoints[i][0], correctedFinalPoints[i][1]), FONT_HERSHEY_SIMPLEX, 2, Scalar(0, 255, 0), 2);
+				rectangle(resultImage, leftROIs[i], Scalar( 0, 0, 255 ), 2);
+				circle(resultImage, Point2f(correctedFinalPoints[i][0], correctedFinalPoints[i][1]), 4, Scalar( 0, 0, 255 ), FILLED, LINE_8);
+				putText(resultImage, to_string( (int)y ), Point2f(correctedFinalPoints[i][0], correctedFinalPoints[i][1]), FONT_HERSHEY_SIMPLEX, 2, Scalar(0, 255, 0), 2);
 				//Setting up image of layout view
 				putText(tempFloorPlan, "o", Point2f( ( x + leftExtent ) / (leftExtent + rightExtent) * imageWidth, ( upExtent - y ) / (upExtent + downExtent) * imageHeight ), FONT_HERSHEY_SIMPLEX, 0.6, CV_RGB(120, 160, 0), 2);			
 			}							
 		}		
 		auto t2 = std::chrono::high_resolution_clock::now();
 		auto duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
-		putText(leftImage, to_string( double(1000000.0/duration) ), Point2f(0, 40), FONT_HERSHEY_SIMPLEX, 1, CV_RGB(0, 0, 255), 3);
-		imshow("Result", leftImage);
+		putText(resultImage, to_string( double(1000000.0/duration) ), Point2f(0, 40), FONT_HERSHEY_SIMPLEX, 1, CV_RGB(0, 0, 255), 3);
+		imshow("Result", resultImage);
 		imshow("Layout Plan", tempFloorPlan);
 		userInputKey = waitKey(1);
 		if ( userInputKey == 'q' )
