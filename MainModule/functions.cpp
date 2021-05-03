@@ -162,8 +162,8 @@ void initializeCameras(VideoCapture *leftVideoFeed, VideoCapture *rightVideoFeed
 {
 	// *leftVideoFeed = VideoCapture(leftFeedIndex);
 	// *rightVideoFeed = VideoCapture(rightFeedIndex);
-	*leftVideoFeed = VideoCapture("/home/cankinik/Desktop/Videos/left7.avi");
-	*rightVideoFeed = VideoCapture("/home/cankinik/Desktop/Videos/right7.avi");	
+	*leftVideoFeed = VideoCapture("/home/cankinik/Desktop/Videos/left4.avi");
+	*rightVideoFeed = VideoCapture("/home/cankinik/Desktop/Videos/right4.avi");	
 	// *leftVideoFeed = VideoCapture("/home/cankinik/Desktop/left.avi");
 	// *rightVideoFeed = VideoCapture("/home/cankinik/Desktop/right.avi");	
 	(*leftVideoFeed).set(CAP_PROP_FOURCC, 0x47504A4D);	//Using MJPG format rather than YUVY so that 30FPS 1080p is enabled
@@ -401,9 +401,7 @@ void stereoCalibration()
 //Loads the coefficient and parameter results from the .yml file, also the rectangles and the layout sizes
 void loadResults()
 {
-	//These are correct for our system, but currently we are testing using the 1080 calibration yml file done in python
-	
-    FileStorage file("../CameraCalibratingOption/CalibrationResults.yml", FileStorage::READ);	//"CalibrationResults.yml" ///home/cankinik/Desktop/QTProject/CameraCalibratingOption/CalibrationResults.yml
+	FileStorage file("../CameraCalibratingOption/CalibrationResults.yml", FileStorage::READ);	
 
     file["cameraMatrix1"] >> cameraMatrix1;
     file["distCoeffs1"] >> distCoeffs1;
@@ -865,7 +863,7 @@ void toolLocationUpdater(Mat *updatedLeftImage, Mat *updatedRightImage, bool *pr
 			}
 		}	
 		//Update the tool locations every 60 seconds, checking every 600ms if app is closed so that when the program is terminated, it waits at most 600ms.
-		for(int i = 0; i < 10; i++)
+		for(int i = 0; i < 100; i++)
 		{
 			if((*programNotTerminated))
 			{

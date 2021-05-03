@@ -51,8 +51,8 @@ int main()
     vector<String> images1;
     vector<String> images2;
 
-    string path1 = "./Feed1Pictures/*.png";
-    string path2 = "./Feed2Pictures/*.png";
+    string path1 = "./Feed1Pictures/*.jpg";
+    string path2 = "./Feed2Pictures/*.jpg";
 
     glob(path1, images1);
     glob(path2, images2);

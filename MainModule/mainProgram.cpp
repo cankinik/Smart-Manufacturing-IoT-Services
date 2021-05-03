@@ -73,11 +73,6 @@ int main()
 	{		   			 
 		auto t1 = std::chrono::high_resolution_clock::now();
 		floorPlan.copyTo(tempFloorPlan);
-		
-		// leftVideoFeed >> tempFrame1;
-		// rightVideoFeed >> tempFrame2;
-		// leftVideoFeed >> tempFrame1;
-		// rightVideoFeed >> tempFrame2;
 		leftVideoFeed >> tempFrame1;
 		rightVideoFeed >> tempFrame2;
 		leftImage = myUndistort(1, tempFrame1);
