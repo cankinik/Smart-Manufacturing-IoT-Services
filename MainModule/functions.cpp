@@ -162,6 +162,8 @@ void initializeCameras(VideoCapture *leftVideoFeed, VideoCapture *rightVideoFeed
 {
 	// *leftVideoFeed = VideoCapture(leftFeedIndex);
 	// *rightVideoFeed = VideoCapture(rightFeedIndex);
+	// *leftVideoFeed = VideoCapture("/home/cankinik/Desktop/Videos/left6.avi");
+	// *rightVideoFeed = VideoCapture("/home/cankinik/Desktop/Videos/right6.avi");	
 	*leftVideoFeed = VideoCapture("/home/cankinik/Desktop/left.avi");
 	*rightVideoFeed = VideoCapture("/home/cankinik/Desktop/right.avi");	
 	(*leftVideoFeed).set(CAP_PROP_FOURCC, 0x47504A4D);	//Using MJPG format rather than YUVY so that 30FPS 1080p is enabled
@@ -877,12 +879,12 @@ void toolLocationUpdater(Mat *updatedLeftImage, Mat *updatedRightImage, bool *pr
 				toolIDIndices[i].clear();	//Once you have covered all of the points of a certain toop type, clear that portion so that the next update is not affected by it				
 			}
 		}	
-		//Update the tool locations every 60 seconds, checking every 6 seconds if app is closed so that when the program is terminated, it waits at most 6 seconds.
-		for(int i = 0; i < 10; i++)
+		//Update the tool locations every 60 seconds, checking every 600ms if app is closed so that when the program is terminated, it waits at most 600ms.
+		for(int i = 0; i < 100; i++)
 		{
 			if((*programNotTerminated))
 			{
-				this_thread::sleep_for(chrono::milliseconds(6000) );	
+				this_thread::sleep_for(chrono::milliseconds(600) );	
 			}
 		}			
 	}

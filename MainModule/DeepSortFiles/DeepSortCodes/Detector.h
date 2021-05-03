@@ -37,8 +37,8 @@ class Detector
 		Status status;
 		GraphDef graph_def; **/
 		
-		float confThreshold = 0.6;
-		float nmsThreshold = 0.6;
+		float confThreshold = 0.7;
+		float nmsThreshold = 0.8;
 		int inpWidth = 416;
 		int inpHeight = 416;
 		

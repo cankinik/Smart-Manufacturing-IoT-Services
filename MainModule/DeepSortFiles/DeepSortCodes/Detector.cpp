@@ -70,7 +70,7 @@ vector<Rect> Detector::postprocess(Mat& frame, vector<Mat>& outs)
                 
                 Rect newRect = Rect(left, top, width, height);
                 
-                int index = checkOverlap(newRect, boxes, 0.7);
+                int index = checkOverlap(newRect, boxes, 0.4);
                 
                 //if no overlapping rectangles are found or overalpping rectangles are from different classes
                 if ( index == -1 ){
@@ -136,12 +136,9 @@ vector<String> Detector::getOutputsNames(const Net& net)
 float getIOU(Rect first, Rect second){
 
 	float intersection_area = (first & second).area();
-	float union_area = (first|second).area();
+	float union_area = first.area() + second.area() - intersection_area;
 	
-	float iou = intersection_area / union_area ;
-	
-	//cout<<"IOU : "<<iou<<endl;
-	
+	float iou = intersection_area / union_area ;	
 	return iou  ;
 }
 
@@ -149,15 +146,13 @@ float getIOU(Rect first, Rect second){
 int checkOverlap(Rect newRect, vector<Rect> &existingRects, float threshold ) {
 
 	int index = -1;
-	float maxIOU = 0;
 	
 	for( int i = 0; i < existingRects.size() ; i++ ){
 	
 		float newIOU = getIOU( existingRects[i] , newRect );
-		if( newIOU > threshold && newIOU > maxIOU ){
-			index = i;
-			maxIOU = newIOU;
-			//cout<<"found one"<<endl;
+		if( newIOU > threshold){
+			index = 0;
+			break;
 		}
 	}
 	return index;

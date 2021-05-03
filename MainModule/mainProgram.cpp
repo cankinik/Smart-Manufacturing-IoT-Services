@@ -75,12 +75,16 @@ int main()
 		
 		leftVideoFeed >> tempFrame1;
 		rightVideoFeed >> tempFrame2;
+		leftVideoFeed >> tempFrame1;
+		rightVideoFeed >> tempFrame2;
+		leftVideoFeed >> tempFrame1;
+		rightVideoFeed >> tempFrame2;
 		leftImage = myUndistort(1, tempFrame1);
 		rightImage = myUndistort(0, tempFrame2);
 		leftROIs = leftDeepsortTracker.runFrame(leftImage);
 		rightROIs = rightDeepsortTracker.runFrame(rightImage);		
 			
-		matchROIs(&leftROIs, &rightROIs);									//Also makes it so that the bounds of the ROIs fall inside the regions of the images.		
+		matchROIs(&leftROIs, &rightROIs);									//Also makes it so that the bounds of the ROIs fall inside the regions of the images.	
 		if( leftROIs.size() != 0 && rightROIs.size() != 0 )
 		{ 		
 			positionsInROIs = findPositions(leftImage, rightImage, leftROIs, rightROIs);		
@@ -96,9 +100,10 @@ int main()
 				x = correctedFinalPoints[i][4];
 				y = correctedFinalPoints[i][5];
 				z = correctedFinalPoints[i][6];
-				//Setting up image of camera feed
+				//Setting up image of camera feed				
+				rectangle(leftImage, leftROIs[i], Scalar( 0, 0, 255 ), 2);
 				circle(leftImage, Point2f(correctedFinalPoints[i][0], correctedFinalPoints[i][1]), 4, Scalar( 0, 0, 255 ), FILLED, LINE_8);
-				putText(leftImage, to_string( (int)y ), Point2f(correctedFinalPoints[i][0], correctedFinalPoints[i][1]), FONT_HERSHEY_SIMPLEX, 2, Scalar(0, 255, 0), 2);	//Change 5 to 6 if you are using the untilted version, 5 = y, 6 = z
+				putText(leftImage, to_string( (int)y ), Point2f(correctedFinalPoints[i][0], correctedFinalPoints[i][1]), FONT_HERSHEY_SIMPLEX, 2, Scalar(0, 255, 0), 2);
 				//Setting up image of layout view
 				putText(tempFloorPlan, "o", Point2f( ( x + leftExtent ) / (leftExtent + rightExtent) * imageWidth, ( upExtent - y ) / (upExtent + downExtent) * imageHeight ), FONT_HERSHEY_SIMPLEX, 0.6, CV_RGB(120, 160, 0), 2);			
 			}							
