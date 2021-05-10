@@ -1,11 +1,11 @@
 %YAML:1.0
 ---
-WidthOfPlan: 1.0100000381469727e+01
+WidthOfPlan: 9.8000001907348633e+00
 HeightOfPlan: 1.7200000762939453e+01
-CameraPositionX: 4.4007143974304199e+00
-CameraPositionY: 4.5632743835449219e-01
+CameraPositionX: 4.4099998474121094e+00
+CameraPositionY: 3.8612174987792969e-01
 FloorPlanDirectory: "/home/cankinik/Desktop/SeniorProjectFinal/MainModule/EE102 PLAN.png"
 prohibited_rectangles:
    prohibited_rectangles_0: [ 0., 0., 0., 0. ]
-   prohibited_rectangles_1: [ -4.01595259e+00, 9.82857132e+00,
-       2.78952408e+00, -3.36979580e+00 ]
+   prohibited_rectangles_1: [ -2.00666642e+00, 1.59714289e+01,
+       4.08333302e+00, -4.31755161e+00 ]

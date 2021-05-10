@@ -57,7 +57,9 @@ int main()
 	int imageWidth = floorPlan.size().width;
 	int imageHeight = floorPlan.size().height;
 	float x, y, z;	
-	Mat resultImage;		
+	Mat resultImage;	
+	vector<vector<vector<float>>> lastFewCorrectedFinalPoints;	
+	const int numberOfLastPointsKept = 30;
 
 	Mat tempFrame1, tempFrame2;
 	//Start of the program
@@ -67,8 +69,8 @@ int main()
 	loadResults();		
 	createUndistortionMapping();
 	calculateRotationAndTranslation();
-	usleep(1000000);	//Wait for 1 seconds so that the cameras open and the frames start being updated.
-	toolLocationUpdaterThread = std::thread(toolLocationUpdater, &leftImage, &rightImage, &programNotTerminated);		
+	// usleep(1000000);	//Wait for 1 seconds so that the cameras open and the frames start being updated.
+	// toolLocationUpdaterThread = std::thread(toolLocationUpdater, &leftImage, &rightImage, &programNotTerminated);		
 	while(programNotTerminated)
 	{		   			 
 		auto t1 = std::chrono::high_resolution_clock::now();
@@ -87,7 +89,7 @@ int main()
 			finalPoints = extractFinalPositions(positionsInROIs);
 			correctedFinalPoints = correctResultsForRotation(finalPoints);	
 
-			alertForSocialDistancing(correctedFinalPoints, 150.0, 20);
+			alertForSocialDistancing(correctedFinalPoints, 150.0, 20);	//150cm is distance treshold, 20 frames is the exposure treshold
 			alertProhibitedAreaEntry(correctedFinalPoints);
 
 			//Plotting location of workers			
@@ -101,8 +103,25 @@ int main()
 				circle(resultImage, Point2f(correctedFinalPoints[i][0], correctedFinalPoints[i][1]), 4, Scalar( 0, 0, 255 ), FILLED, LINE_8);
 				putText(resultImage, to_string( (int)y ), Point2f(correctedFinalPoints[i][0], correctedFinalPoints[i][1]), FONT_HERSHEY_SIMPLEX, 2, Scalar(0, 255, 0), 2);
 				//Setting up image of layout view
-				putText(tempFloorPlan, "o", Point2f( ( x + leftExtent ) / (leftExtent + rightExtent) * imageWidth, ( upExtent - y ) / (upExtent + downExtent) * imageHeight ), FONT_HERSHEY_SIMPLEX, 0.6, CV_RGB(120, 160, 0), 2);			
-			}							
+				putText(tempFloorPlan, "o", Point2f( ( x + leftExtent ) / (leftExtent + rightExtent) * imageWidth, ( upExtent - y ) / (upExtent + downExtent) * imageHeight ), FONT_HERSHEY_SIMPLEX, 0.8, CV_RGB(120, 160, 0), 4);			
+			}		
+
+			//Plotting the position of workers in the last few frames with more emphasis on recent positions. This is completely optional and is only implemented for visual purposes
+			lastFewCorrectedFinalPoints.push_back(correctedFinalPoints);
+			if (lastFewCorrectedFinalPoints.size() == numberOfLastPointsKept)
+			{
+				lastFewCorrectedFinalPoints.erase(lastFewCorrectedFinalPoints.begin() + 0);	//FIFO		
+			}
+			for (int j = 0; j < lastFewCorrectedFinalPoints.size(); j++)
+			{
+				for(int i = 0; i < lastFewCorrectedFinalPoints[j].size(); i++)
+				{				
+					x = lastFewCorrectedFinalPoints[j][i][4];
+					y = lastFewCorrectedFinalPoints[j][i][5];
+					putText(tempFloorPlan, "o", Point2f( ( x + leftExtent ) / (leftExtent + rightExtent) * imageWidth, ( upExtent - y ) / (upExtent + downExtent) * imageHeight ), FONT_HERSHEY_SIMPLEX, (0.6 * j / numberOfLastPointsKept), CV_RGB(120, 160, 0), (3 * j / numberOfLastPointsKept));			
+				}	
+			}
+
 		}		
 		auto t2 = std::chrono::high_resolution_clock::now();
 		auto duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
@@ -116,7 +135,7 @@ int main()
 			break;
 		}		
 	}
-	toolLocationUpdaterThread.join();	
+	// toolLocationUpdaterThread.join();	
 	return 0;
 }
 

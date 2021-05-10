@@ -162,7 +162,7 @@ void initializeCameras(VideoCapture *leftVideoFeed, VideoCapture *rightVideoFeed
 {
 	// *leftVideoFeed = VideoCapture(leftFeedIndex);
 	// *rightVideoFeed = VideoCapture(rightFeedIndex);
-	*leftVideoFeed = VideoCapture("/home/cankinik/Desktop/Videos/left4.avi");
+	*leftVideoFeed = VideoCapture("/home/cankinik/Desktop/Videos/left4.avi");		//video 4 for tracking demo, 7 for tool demo
 	*rightVideoFeed = VideoCapture("/home/cankinik/Desktop/Videos/right4.avi");	
 	// *leftVideoFeed = VideoCapture("/home/cankinik/Desktop/left.avi");
 	// *rightVideoFeed = VideoCapture("/home/cankinik/Desktop/right.avi");	
