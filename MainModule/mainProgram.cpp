@@ -59,7 +59,7 @@ int main()
 	float x, y, z;	
 	Mat resultImage;	
 	vector<vector<vector<float>>> lastFewCorrectedFinalPoints;	
-	const int numberOfLastPointsKept = 30;
+	const int numberOfLastPointsKept = 20;
 
 	Mat tempFrame1, tempFrame2;
 	//Start of the program
