@@ -1,0 +1,40 @@
+1)Install Nvidia 450 driver using "software and updates" application -> additional drivers...
+2)To install Cuda, use the following commands (go to Downloads directory if you want):
+	wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-ubuntu1804.pinsudo 
+
+	wget https://developer.download.nvidia.com/compute/cuda/11.2.2/local_installers/cuda-repo-ubuntu1804-11-2-local_11.2.2-460.32.03-1_amd64.deb
+
+	sudo dpkg -i cuda-repo-ubuntu1804-11-2-local_11.2.2-460.32.03-1_amd64.deb
+
+	sudo apt-key add /var/cuda-repo-ubuntu1804-11-2-local/7fa2af80.pub
+
+	sudo apt-get updatesudo apt-get -y install cuda
+
+3)Download CuDnn (go to Downloads directory if you want)
+	from https://developer.nvidia.com/rdp/cudnn-archive
+	It is the "Download cuDNN v8.1.0 (January 26th, 2021), for CUDA 11.0,11.1 and 11.2" option
+	You should download cuDNN Library for Linux (x86_64)
+4)Setup CuDnn using the following commands:
+	tar -xzvf cudnn-x.x-linux-x64-v8.x.x.x.tgz	//Change the x so that they match the name
+
+	sudo cp cuda/include/cudnn.h /usr/local/cuda/include		//Did this, couldn't do next
+
+	sudo cp -P cuda/lib64/libcudnn /usr/local/cuda/lib64 
+
+	sudo cp -P cuda/lib64/libcudnn* /usr/local/cuda/lib64
+
+	sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn
+
+	sudo chmod a+r /usr/local/cuda/include/cudnn.h /usr/local/cuda/lib64/libcudnn
+
+	sudo gedit /etc/profile.d/cuda.sh
+
+	export PATH=$PATH:/usr/local/cuda/bin
+	
+	export CUDADIR=/usr/local/cuda
+
+	sudo gedit /etc/ld.so.conf.d/cuda.conf
+
+	/usr/local/cuda/lib64
+
+	sudo ldconfig
