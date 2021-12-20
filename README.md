@@ -1,4 +1,4 @@
-# SeniorProjectFinal
+# Smart Manufacturing IoT Services
 This is a yearlong senior project that implements IoT solutions for Smart Manufacturing. 
 
 A video demonstrating the capabilities and working principles can be found here: https://www.youtube.com/watch?v=HEh5HelEZMU (Starts at 1:09:10, subtitles are in English)
